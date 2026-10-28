@@ -30,15 +30,7 @@ def register_sales_table(spark, rows):
 
 def total_revenue_by_region(spark):
     """
-    TODO 1:
-    Escreva e execute (via `spark.sql(...)`) uma query SQL sobre a
-    tabela "sales" que retorne o total de receita ("revenue") por
-    regiao ("region"), ORDENADO da maior para a menor receita.
-
-    Retorne o resultado como um dicionario {region: total_revenue}.
-
-    Dica: SELECT region, SUM(revenue) AS total_revenue FROM sales
-          GROUP BY region ORDER BY total_revenue DESC
+    Retorna a receita total por regiao, da maior para a menor.
     """
     query = """
         SELECT region, SUM(revenue) AS total_revenue
@@ -54,15 +46,8 @@ def total_revenue_by_region(spark):
 
 def top_n_products(spark, n):
     """
-    TODO 2:
-    Escreva uma query SQL que retorne os `n` PRODUTOS com maior receita
-    total (somando "revenue" por "product"), ordenados do maior para o
-    menor. Retorne apenas os NOMES dos produtos, como uma lista de
-    strings (na ordem correta).
-
-    Dica: use LIMIT {n} na sua query (pode usar f-string para inserir o
-    valor de n).
-    """ 
+    Retorna os n produtos com maior receita total.
+    """
     query = f"""
         SELECT product, SUM(revenue) AS total_revenue
         FROM sales
@@ -74,23 +59,13 @@ def top_n_products(spark, n):
     resultado = spark.sql(query).collect()
 
     return [linha["product"] for linha in resultado]
-   
 
 
 def regions_above_threshold(spark, threshold):
     """
-    TODO 3:
-    Escreva uma query SQL que retorne as regioes cuja receita TOTAL
-    (soma de "revenue") seja MAIOR que `threshold`, ordenadas da maior
-    para a menor receita. Retorne apenas os NOMES das regioes, como uma
-    lista de strings.
-
-    Dica: use a clausula HAVING para filtrar depois do GROUP BY (WHERE
-    nao funciona sobre valores agregados).
+    Retorna as regioes cuja receita total supera o limite informado.
     """
-     
     query = f"""
-
         SELECT region, SUM(revenue) AS total_revenue
         FROM sales
         GROUP BY region
